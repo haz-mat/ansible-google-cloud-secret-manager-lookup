@@ -1,1 +1,1 @@
-# ansible-google-secrets-manager-filter
+# ansible-google-secrets-manager-lookup
