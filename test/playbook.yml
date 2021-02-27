@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - debug:
+      var: lookup('google_cloud_secret', 'projects/701564156545/secrets/foobar/versions/1')
