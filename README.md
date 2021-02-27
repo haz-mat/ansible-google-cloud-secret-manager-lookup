@@ -1,1 +1,1 @@
-# ansible-google-secrets-manager-lookup
+# ansible-google-cloud-secret-manager-lookup
