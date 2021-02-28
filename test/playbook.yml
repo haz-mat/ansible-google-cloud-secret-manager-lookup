@@ -3,5 +3,22 @@
   connection: local
   gather_facts: no
   tasks:
-  - debug:
-      var: lookup('google_cloud_secret', 'projects/701564156545/secrets/foobar/versions/1')
+  - assert:
+      that:
+      - google_cloud_project_id is defined
+      - google_cloud_secret_name is defined
+      - google_cloud_secret_version is defined
+  - name: Should succeed and print out secret.
+    debug:
+      var: lookup('google_cloud_secret', 'projects/'+google_cloud_project_id+'/secrets/'+google_cloud_secret_name+'/versions/'+google_cloud_secret_version)
+    register: lookup_success_task
+  - name: Should fail to find an invalid secret.
+    debug:
+      var: lookup('google_cloud_secret', 'projects/'+google_cloud_project_id+'/secrets/my-invalid-secret/versions/1')
+    register: lookup_invalid_task
+    failed_when: lookup_invalid_task.succeeded
+  - name: Should fail to find secret with malformed request.
+    debug:
+      var: lookup('google_cloud_secret', google_cloud_secret_name+'versions/'+google_cloud_secret_version')
+    register: lookup_malformed_task
+    failed_when: lookup_malformed_task.succeeded
