@@ -1,5 +1,4 @@
 from ansible.errors import AnsibleError
-from ansible.module_utils._text import to_text, to_native
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
 from google.cloud import secretmanager
@@ -21,11 +20,7 @@ class LookupModule(LookupBase):
                     request={"name": term}
                 ).payload.data.decode("utf-8")
             except Exception as e:
-                raise AnsibleError("Error %s: %s" % (term, to_native(e)))
+                raise AnsibleError(e)
 
-            if self.get_option("split_lines"):
-                for line in response.read().splitlines():
-                    ret.append(to_text(line))
-            else:
-                ret.append(to_text(response.read()))
+            ret.append(response)
         return ret
